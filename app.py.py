@@ -30,7 +30,6 @@ contacts = {
     "Mohammad Neamul Hasan (173)": {"e-TIN": "7641 5864 2013", "Circle": "190", "Zone": "09"},
     "MD SHAFIQUL ISLAM": {"e-TIN": "2299 1357 0161", "Circle": "131", "Zone": "06"}
 }
-
 st.title("📱 কন্টাক্ট ডিরেক্টরি সার্চ")
 
 # সার্চ বক্স
