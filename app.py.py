@@ -1,6 +1,6 @@
 import streamlit as st
 
-# আপনার ২০০টি নামের লিস্ট ও তথ্য এখানে যোগ করবেন
+# আপনার পেপার থেকে নেওয়া কন্টাক্ট ডেটা
 contacts = {
     "Shaik Nazrul Islam": {"e-TIN": "2886 9380 3054", "Circle": "34", "Zone": "3"},
     "Abu Yousuf Joarder": {"e-TIN": "6583 6368 2606", "Circle": "138", "Zone": "8"},
@@ -30,26 +30,25 @@ contacts = {
     "Mohammad Neamul Hasan (173)": {"e-TIN": "7641 5864 2013", "Circle": "190", "Zone": "09"},
     "MD SHAFIQUL ISLAM": {"e-TIN": "2299 1357 0161", "Circle": "131", "Zone": "06"}
 }
+
 st.title("📱 কন্টাক্ট ডিরেক্টরি সার্চ")
 
-# সার্চ বক্স
 search_query = st.text_input("যেকোনো নাম দিয়ে সার্চ করুন:", "").strip()
 
 if search_query:
-	# নামের শুরুর অক্ষরের সাথে মিলিয়ে সার্চ (Prefix Matching)
-	matched_results = {
-		name: info for name, info in contacts.items()
-		if name.lower().startswith(search_query.lower())
-	}
+    matched_results = {
+        name: info for name, info in contacts.items() 
+        if name.lower().startswith(search_query.lower())
+    }
 
-	if matched_results:
-		st.subheader(f"পাওয়া গেছে ({len(matched_results)} টি):")
-		for name, info in matched_results.items():
-			with st.expander(f"👤 {name}", expanded=True):
-				st.write(f"**মোবাইল:** {info['মোবাইল']}")
-				st.write(f"**ঠিকানা:** {info['ঠিকানা']}")
-				st.write(f"**ইমেইল:** {info['ইমেইল']}")
-	else:
-		st.warning("এই নামে কোনো তথ্য পাওয়া যায়নি।")
+    if matched_results:
+        st.subheader(f"পাওয়া গেছে ({len(matched_results)} টি):")
+        for name, info in matched_results.items():
+            with st.expander(f"👤 {name}", expanded=True):
+                st.write(f"**e-TIN:** {info.get('e-TIN', 'N/A')}")
+                st.write(f"**Circle:** {info.get('Circle', 'N/A')}")
+                st.write(f"**Zone:** {info.get('Zone', 'N/A')}")
+    else:
+        st.warning("এই নামে কোনো তথ্য পাওয়া যায়নি।")
 else:
-	st.info("উপরে নাম টাইপ করে তথ্য সার্চ করুন।")
+    st.info("উপরে নাম টাইপ করে তথ্য সার্চ করুন।")
