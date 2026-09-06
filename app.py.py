@@ -70,25 +70,26 @@ st.markdown("""
     /* লিংক বাটনের বিশেষ স্টাইল */
     a.link-btn {
         display: block;
-        padding: 10px;
-        margin: 5px 0;
-        background: rgba(255, 255, 255, 0.1);
+        padding: 12px;
+        margin: 6px 0;
+        background: rgba(255, 255, 255, 0.08);
         color: #00d2ff !important;
         text-decoration: none;
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.15);
         text-align: center;
         font-weight: bold;
-        transition: 0.3s;
+        transition: 0.3s ease-in-out;
     }
     a.link-btn:hover {
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.2);
         border-color: #00d2ff;
+        box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# সেশন স্টেটে কন্টাক্ট ডেটা লোড করা (PDF থেকে পাওয়া সমস্ত ডেটা অন্তর্ভুক্ত)
+# সেশন স্টেটে কন্টাক্ট ডেটা লোড করা
 if "contacts" not in st.session_state:
     st.session_state.contacts = {
         # Number 01
@@ -285,17 +286,19 @@ with col2:
 
 st.markdown("---")
 
-# ৩. গুরুত্বপূর্ণ ওয়েব সাইটের সেকশন (Important Links)
-st.subheader("🌐 গুরুত্বপূর্ণ সাইট ও লিংকসমূহ")
+# ৩. গুরুত্বপূর্ণ লিংকসমূহ (Important Links)
+st.subheader("🔗 গুরুত্বপূর্ণ লিংকসমূহ")
 l_col1, l_col2 = st.columns(2)
 
 with l_col1:
-    st.markdown('<a class="link-btn" href="https://etaxnbr.gov.bd/" target="_blank">🌐 NBR e-Return Portal</a>', unsafe_allow_html=True)
-    st.markdown('<a class="link-btn" href="https://secure.incometax.gov.bd/TINHome" target="_blank">📄 e-TIN Registration</a>', unsafe_allow_html=True)
+    st.markdown('<a class="link-btn" href="https://etaxnbr.gov.bd/" target="_blank">💻 e-Return Portal (ই-রিটার্ন সাবমিশন)</a>', unsafe_allow_html=True)
+    st.markdown('<a class="link-btn" href="https://secure.incometax.gov.bd/TINHome" target="_blank">📄 e-TIN Registration (ই-টিন পোর্টাল)</a>', unsafe_allow_html=True)
+    st.markdown('<a class="link-btn" href="https://ekallan.gov.bd/" target="_blank">🏛️ E-Challan Verification (চালান ভেরিফাই)</a>', unsafe_allow_html=True)
 
 with l_col2:
     st.markdown('<a class="link-btn" href="https://nbr.gov.bd/" target="_blank">🏛️ NBR Official Website</a>', unsafe_allow_html=True)
-    st.markdown('<a class="link-btn" href="https://bdloans.org/" target="_blank">🔍 Tax & Finance Portal</a>', unsafe_allow_html=True)
+    st.markdown('<a class="link-btn" href="https://secure.incometax.gov.bd/VerifyTIN" target="_blank">🔍 TIN Verification (টিন ভেরিফিকেশন)</a>', unsafe_allow_html=True)
+    st.markdown('<a class="link-btn" href="https://bdloans.org/" target="_blank">📊 Tax & Finance Portal</a>', unsafe_allow_html=True)
 
 st.markdown("---")
 
