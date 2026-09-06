@@ -25,7 +25,7 @@ def get_and_update_views():
 
 total_views = get_and_update_views()
 
-# মূল ডার্ক থিম ও ইনপুট বক্সের আগের কালার সমন্বয় করা CSS
+# CSS ডিজাইন ফিক্সিং
 st.markdown("""
     <style>
     /* মূল ব্যাকগ্রাউন্ড ও ডার্ক থিম */
@@ -45,30 +45,72 @@ st.markdown("""
         margin-bottom: 20px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
-    
-    /* সকল টেক্সট ইনপুট, সিলেক্ট বক্স এবং টেক্সট ফিল্ডে সাদা লেখা ও আগের ব্যাকগ্রাউন্ড */
-    div[data-baseweb="input"] input,
-    div[data-baseweb="select"] div,
-    div[data-testid="stTextInput"] input,
-    div[data-testid="stSelectbox"] div {
-        color: #ffffff !important;
-        background-color: rgba(255, 255, 255, 0.07) !important;
+
+    /* লাল বৃত্তের সার্চ ইনপুট বক্সে ফন্ট কালার কালো করা */
+    div[data-testid="stTextInput"] input {
+        color: #000000 !important;
+        background-color: #ffffff !important;
+        font-weight: 600 !important;
         border-radius: 8px !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    /* সিলেক্ট বক্স এবং অন্যান্য ইনপুটের কালার স্টাইলিং */
+    div[data-baseweb="select"] div {
+        color: #000000 !important;
+        background-color: #ffffff !important;
+        border-radius: 8px !important;
     }
 
     /* ড্রপডাউন অপশন পপআপ ব্যাকগ্রাউন্ড ও টেক্সট */
     ul[data-baseweb="menu"] {
-        background-color: #1a2e3b !important;
-        color: #ffffff !important;
+        background-color: #ffffff !important;
     }
     li[data-baseweb="option"] {
-        color: #ffffff !important;
+        color: #000000 !important;
     }
 
     /* লেবেল ও টেক্সটের কালার সাদা রাখা */
-    label, p, span, div {
+    label, p, span {
         color: #ffffff !important;
+    }
+
+    /* সবুজ বৃত্তের গুরুত্বপুর্ণ লিংক কার্ড ডিজাইন (সুদৃশ্য বাটন স্টাইল) */
+    .link-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .link-card:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #00d2ff;
+        box-shadow: 0 6px 20px rgba(0, 210, 255, 0.3);
+    }
+    .link-card h4 {
+        color: #ffffff !important;
+        margin-bottom: 8px !important;
+        font-size: 16px;
+    }
+    .link-card a {
+        display: inline-block;
+        color: #00d2ff !important;
+        text-decoration: none;
+        font-weight: bold;
+        word-break: break-all;
+        font-size: 14px;
+        padding: 6px 12px;
+        background: rgba(0, 210, 255, 0.1);
+        border-radius: 6px;
+        border: 1px solid rgba(0, 210, 255, 0.3);
+    }
+    .link-card a:hover {
+        background: #00d2ff;
+        color: #0f2027 !important;
     }
 
     /* বাটনের ডিজাইন */
@@ -80,26 +122,6 @@ st.markdown("""
         border: none;
         font-weight: bold;
     }
-
-    /* লিংক বাটনের বিশেষ স্টাইল */
-    a.link-btn {
-        display: block;
-        padding: 12px;
-        margin: 6px 0;
-        background: rgba(255, 255, 255, 0.08);
-        color: #00d2ff !important;
-        text-decoration: none;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        text-align: center;
-        font-weight: bold;
-        transition: 0.3s ease-in-out;
-    }
-    a.link-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: #00d2ff;
-        box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -110,21 +132,21 @@ if "contacts" not in st.session_state:
         "Shaikh Nazrul Islam": {"Drive": "1", "e-TIN": "2886 9380 3054", "Circle": "54", "Zone": "3", "E-Return": "65", "Remarks": "OUT"},
         "Abu Yousuf Joarder": {"Drive": "1", "e-TIN": "6585 6368 7606", "Circle": "158", "Zone": "8", "E-Return": "21", "Remarks": ""},
         "G.M. Khorshed Alam": {"Drive": "1", "e-TIN": "5622 2372 1805", "Circle": "186", "Zone": "9", "E-Return": "13", "Remarks": ""},
-        "Rawshan Ara Kabir": {"Drive": "1", "e-TIN": "6977 7389 7603", "Circle": "499", "Zone": "23", "E-Return": "52", "Remarks": ""},
-        "Farooq Ahmed": {"Drive": "1", "e-TIN": "7881 4121 7843", "Circle": "41", "Zone": "02", "E-Return": "112", "Remarks": ""},
-        "Abdullah Al Mahmud": {"Drive": "1", "e-TIN": "6707 8250 6247", "Circle": "55", "Zone": "03", "E-Return": "36", "Remarks": ""},
+        "Rawshan Ara Kabir": {"Drive": "", "e-TIN": "6977 7389 7603", "Circle": "499", "Zone": "23", "E-Return": "52", "Remarks": ""},
+        "Farooq Ahmed": {"Drive": "", "e-TIN": "7881 4121 7843", "Circle": "41", "Zone": "02", "E-Return": "112", "Remarks": ""},
+        "Abdullah Al Mahmud": {"Drive": "", "e-TIN": "6707 8250 6247", "Circle": "55", "Zone": "03", "E-Return": "36", "Remarks": ""},
         "Towfiq Elahi": {"Drive": "1", "e-TIN": "1288 0833 3865", "Circle": "152", "Zone": "07", "E-Return": "104", "Remarks": ""},
         "Mohammad Humayun Kabir": {"Drive": "1", "e-TIN": "678822460329", "Circle": "130", "Zone": "06", "E-Return": "22", "Remarks": ""},
         "Md. Shahjahan Ali": {"Drive": "1", "e-TIN": "6881 1133 8091", "Circle": "241", "Zone": "11", "E-Return": "62", "Remarks": ""},
-        "Saleha Sarwar": {"Drive": "1", "e-TIN": "1686 3877 2479", "Circle": "159", "Zone": "08", "E-Return": "10", "Remarks": ""},
-        "Saida Begum": {"Drive": "1", "e-TIN": "8249 7955 4462", "Circle": "276", "Zone": "13", "E-Return": "37", "Remarks": ""},
-        "Fariha Binte Quayum": {"Drive": "1", "e-TIN": "1840 3722 6881", "Circle": "215", "Zone": "10", "E-Return": "54", "Remarks": ""},
+        "Saleha Sarwar": {"Drive": "", "e-TIN": "1686 3877 2479", "Circle": "159", "Zone": "08", "E-Return": "10", "Remarks": ""},
+        "Saida Begum": {"Drive": "", "e-TIN": "8249 7955 4462", "Circle": "276", "Zone": "13", "E-Return": "37", "Remarks": ""},
+        "Fariha Binte Quayum": {"Drive": "", "e-TIN": "1840 3722 6881", "Circle": "215", "Zone": "10", "E-Return": "54", "Remarks": ""},
         "Sabera Belal": {"Drive": "1", "e-TIN": "4770 3972 1039", "Circle": "55", "Zone": "03", "E-Return": "47", "Remarks": ""},
         "Zakia Binte Quayum": {"Drive": "1", "e-TIN": "3243 3742 7116", "Circle": "41", "Zone": "02", "E-Return": "51", "Remarks": ""},
-        "Gulshan Ara Begum": {"Drive": "1", "e-TIN": "7841 2955 1338", "Circle": "215", "Zone": "10", "E-Return": "53", "Remarks": ""},
-        "A. S. Md Nazmul Huda": {"Drive": "1", "e-TIN": "1623 8479 4917", "Circle": "71", "Zone": "04", "E-Return": "09", "Remarks": ""},
+        "Gulshan Ara Begum": {"Drive": "", "e-TIN": "7841 2955 1338", "Circle": "215", "Zone": "10", "E-Return": "53", "Remarks": ""},
+        "A. S. Md Nazmul Huda": {"Drive": "", "e-TIN": "1623 8479 4917", "Circle": "71", "Zone": "04", "E-Return": "09", "Remarks": ""},
         "Mahmuda Sultana": {"Drive": "", "e-TIN": "8222 5736 0152", "Circle": "122", "Zone": "06", "E-Return": "93", "Remarks": ""},
-        "Jakia Jasmin": {"Drive": "1", "e-TIN": "3950 3125 2471", "Circle": "323", "Zone": "15", "E-Return": "63", "Remarks": ""},
+        "Jakia Jasmin": {"Drive": "", "e-TIN": "3950 3125 2471", "Circle": "323", "Zone": "15", "E-Return": "63", "Remarks": ""},
         "Sharmin Sultana (Neamul 173)": {"Drive": "1", "e-TIN": "2929 4120 2763", "Circle": "130", "Zone": "06", "E-Return": "39", "Remarks": ""},
         "Ms. Joystna Khatun": {"Drive": "1", "e-TIN": "8231 3539 9302", "Circle": "92", "Zone": "05", "E-Return": "56", "Remarks": ""},
         "Atiq & Family": {"Drive": "1", "e-TIN": "", "Circle": "", "Zone": "", "E-Return": "", "Remarks": ""},
@@ -146,7 +168,7 @@ if "contacts" not in st.session_state:
         "Farzana Noor": {"Drive": "2", "e-TIN": "1762 3115 9220", "Circle": "131", "Zone": "06", "E-Return": "", "Remarks": "OUT"},
         "Sharmin Islam": {"Drive": "2", "e-TIN": "5124 8978 8108", "Circle": "14", "Zone": "01", "E-Return": "", "Remarks": "OUT"},
         "Asifur Rahman": {"Drive": "2", "e-TIN": "2624 5954 2999", "Circle": "14", "Zone": "01", "E-Return": "18", "Remarks": ""},
-        "Kaniz Sultana": {"Drive": "2", "e-TIN": "1763 0067 4920", "Circle": "215", "Zone": "10", "E-Return": "19", "Remarks": ""},
+        "Kaniz Sultana": {"Drive": "22", "e-TIN": "1763 0067 4920", "Circle": "215", "Zone": "10", "E-Return": "19", "Remarks": ""},
         "Md. Mafidul Hasan": {"Drive": "2", "e-TIN": "1618 8375 0303", "Circle": "247", "Zone": "12", "E-Return": "20", "Remarks": ""},
         "Sk. Saleq- Uz- Zaman": {"Drive": "2", "e-TIN": "7974 8322 3450", "Circle": "153", "Zone": "07", "E-Return": "34", "Remarks": ""},
         "Mariam Zamila": {"Drive": "2", "e-TIN": "6241 4926 0808", "Circle": "43", "Zone": "02", "E-Return": "35", "Remarks": ""},
@@ -300,36 +322,44 @@ with col2:
 
 st.markdown("---")
 
-# ৩. গুরুত্বপূর্ণ লিংকসমূহ
+# ৩. গুরুত্বপূর্ণ লিংকসমূহ (সবুজ বৃত্তের অংশটি গুছিয়ে সাজানো হলো)
 st.subheader("🔗 গুরুত্বপূর্ণ লিংকসমূহ")
 l_col1, l_col2 = st.columns(2)
 
 with l_col1:
     st.markdown('''
-        **চালান ভেরিফাই**  
-        <a class="link-btn" href="https://challanverification.finance.gov.bd/echalan/" target="_blank">https://challanverification.finance.gov.bd/echalan/</a>
+        <div class="link-card">
+            <h4>চালান ভেরিফাই</h4>
+            <a href="https://challanverification.finance.gov.bd/echalan/" target="_blank">ওয়েবসাইটে যান ↗</a>
+        </div>
     ''', unsafe_allow_html=True)
     
     st.markdown('''
-        **eReturn Sign in**  
-        <a class="link-btn" href="https://etaxnbr.gov.bd/#/auth/sign-in" target="_blank">https://etaxnbr.gov.bd/#/auth/sign-in</a>
+        <div class="link-card">
+            <h4>eReturn Sign in</h4>
+            <a href="https://etaxnbr.gov.bd/#/auth/sign-in" target="_blank">ওয়েবসাইটে যান ↗</a>
+        </div>
     ''', unsafe_allow_html=True)
 
 with l_col2:
     st.markdown('''
-        **পেমেন্ট এনবিআর**  
-        <a class="link-btn" href="https://nbr.sblesheba.com/IncomeTax/Payment" target="_blank">https://nbr.sblesheba.com/IncomeTax/Payment</a>
+        <div class="link-card">
+            <h4>পেমেন্ট এনবিআর</h4>
+            <a href="https://nbr.sblesheba.com/IncomeTax/Payment" target="_blank">ওয়েবসাইটে যান ↗</a>
+        </div>
     ''', unsafe_allow_html=True)
     
     st.markdown('''
-        **eReturn verified**  
-        <a class="link-btn" href="https://etaxnbr.gov.bd/#/submission-verification" target="_blank">https://etaxnbr.gov.bd/#/submission-verification</a>
+        <div class="link-card">
+            <h4>eReturn verified</h4>
+            <a href="https://etaxnbr.gov.bd/#/submission-verification" target="_blank">ওয়েবসাইটে যান ↗</a>
+        </div>
     ''', unsafe_allow_html=True)
 
 st.markdown("---")
 
-# ৪. সার্চ ইন্টারফেস
-search_query = st.text_input("", placeholder="🔍 নাম দিয়ে অনুসন্ধান করুন").strip()
+# ৪. সার্চ ইন্টারফেস (লাল বৃত্তের ইনপুট কালার ফিক্স করা হয়েছে)
+search_query = st.text_input("", placeholder="🔍 নাম দিয়ে অনুসন্ধান করুন...").strip()
 
 if search_query:
     matched_results = {
@@ -352,7 +382,7 @@ if search_query:
     else:
         st.warning("এই নামে কোনো তথ্য পাওয়া যায়নি।")
 else:
-    st.markdown("<p style='text-align: center; color: #888;'>উপরে নাম টাইপ করে সার্চ করুন</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #cccccc;'>উপরে নাম টাইপ করে সার্চ করুন</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
