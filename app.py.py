@@ -1,300 +1,765 @@
+import streamlit as st
+import streamlit.components.v1 as components
+
+# Streamlit Page Config
+st.set_page_config(page_title="Contact Directory Service", layout="wide")
+
+html_code = """
 <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>e-Return Management System</title>
+    <title>Contact Directory Service</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f9; }
-        h2 { color: #333; text-align: center; }
-        .form-container { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .form-container input, .form-container button { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .form-container button { background-color: #28a745; color: white; border: none; cursor: pointer; }
-        .form-container button:hover { background-color: #218838; }
-        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-        th { background-color: #007bff; color: white; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        .btn-delete:hover { background-color: #c82333; }
+        :root {
+            --bg-main: #f5efe6;
+            --sidebar-bg: #e8ded1;
+            --card-bg: #ffffff;
+            --text-dark: #2c2c2c;
+            --text-muted: #6c757d;
+            --accent-teal: #4dd0e1;
+            --btn-green: #20c997;
+            --border-color: #e0d8cc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .brand i {
+            font-size: 28px;
+            color: #4a4a4a;
+        }
+
+        .brand-title {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #4a4a4a;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            background-color: #d8cbb9;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .nav-item:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-footer {
+            background: #d8cbb9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .sidebar-footer h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-footer p {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .sidebar-footer i {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            font-size: 16px;
+            color: #4a4a4a;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            padding: 20px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Banner Hero */
+        .banner {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-text h1 {
+            font-size: 24px;
+            color: #222;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .banner-text p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #f8f6f0;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 6px 15px;
+            width: 450px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 6px;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            padding: 5px 15px;
+            background: #ede6da;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #4a4a4a;
+            cursor: pointer;
+            border: none;
+        }
+
+        .tag.active {
+            background: #d8cbb9;
+            font-weight: 600;
+        }
+
+        /* Layout Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        /* Left Side: Contact List */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-view-all {
+            background: #ede6da;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .contact-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .contact-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .contact-details h4 {
+            font-size: 14px;
+            color: #222;
+        }
+
+        .contact-details p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .status-online { background-color: #28a745; }
+        .status-offline { background-color: #dc3545; }
+
+        .action-icons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #f5efe6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #4a4a4a;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Right Side: Add Form */
+        .add-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .tab-menu {
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-item {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-item.active {
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group label span {
+            color: red;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 12px;
+            outline: none;
+            background: #fafafa;
+        }
+
+        .btn-save {
+            width: 100%;
+            background: var(--accent-teal);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Quick Links Section (Updated with User Requested Links) */
+        .quick-links {
+            margin-top: 10px;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .link-card {
+            background: #fff;
+            padding: 12px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .link-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .link-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .link-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .link-url {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 130px;
+        }
+
+        /* Responsive Footer */
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
     </style>
 </head>
 <body>
 
-    <h2>e-Return Data Directory</h2>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div>
+            <div class="brand">
+                <i class="fa-solid fa-users-gear"></i>
+                <div>
+                    <div class="brand-title">Contact Directory</div>
+                    <div class="brand-subtitle">Service</div>
+                </div>
+            </div>
 
-    <!-- নতুন তথ্য যোগ করার ফরম -->
-    <div class="form-container">
-        <input type="text" id="drive" placeholder="Drive (e.g. 1)">
-        <input type="text" id="assessee" placeholder="Assessee Name">
-        <input type="text" id="tin" placeholder="E-TIN">
-        <input type="text" id="circle" placeholder="Circle">
-        <input type="text" id="zone" placeholder="Zone">
-        <input type="text" id="returnNo" placeholder="E-Return">
-        <input type="text" id="remarks" placeholder="Remarks">
-        <button onclick="addRow()">নতুন যোগ করুন</button>
+            <ul class="nav-menu">
+                <li class="nav-item active"><i class="fa-solid fa-house"></i> Home</li>
+                <li class="nav-item"><i class="fa-solid fa-user-group"></i> Contacts</li>
+                <li class="nav-item"><i class="fa-solid fa-square-plus"></i> Add Contact</li>
+                <li class="nav-item"><i class="fa-solid fa-border-all"></i> Categories</li>
+                <li class="nav-item"><i class="fa-solid fa-heart"></i> Favorites</li>
+                <li class="nav-item"><i class="fa-solid fa-gear"></i> Settings</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <h4>Stay Connected</h4>
+            <p>Better Communication Builds Stronger Relationships</p>
+            <i class="fa-solid fa-paper-plane"></i>
+        </div>
     </div>
 
-    <!-- ডাটা টেবিল -->
-    <table id="dataTable">
-        <thead>
-            <tr>
-                <th>Drive</th>
-                <th>Assessee Name</th>
-                <th>E-TIN</th>
-                <th>Circle</th>
-                <th>Zone</th>
-                <th>E-Return</th>
-                <th>Remarks</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <!-- JavaScript দিয়ে ডাটা লোড হবে -->
-        </tbody>
-    </table>
+    <!-- Main Workspace -->
+    <div class="main-content">
 
-    <script>
-        // PDF এর প্রাথমিক তথ্যসমূহ
-        const initialData = [
-            // Drive 1
-            {drive: "1", assessee: "Shaikh Nazrul Islam", tin: "2886 9380 3054", circle: "54", zone: "3", returnNo: "65", remarks: "OUT"},
-            {drive: "1", assessee: "Abu Yousuf Joarder", tin: "6585 6368 7606", circle: "158", zone: "8", returnNo: "21", remarks: ""},
-            {drive: "1", assessee: "G.M. Khorshed Alam", tin: "5622 2372 1805", circle: "186", zone: "9", returnNo: "13", remarks: ""},
-            {drive: "1", assessee: "Rawshan Ara Kabir", tin: "7603 6977 7389", circle: "499", zone: "23", returnNo: "52", remarks: ""},
-            {drive: "1", assessee: "Farooq Ahmed", tin: "7881 4121 7843", circle: "41", zone: "02", returnNo: "112", remarks: ""},
-            {drive: "1", assessee: "Abdullah Al Mahmud", tin: "6707 8250 6247", circle: "55", zone: "03", returnNo: "36", remarks: ""},
-            {drive: "1", assessee: "Towfiq Elahi", tin: "1288 0833 3865", circle: "152", zone: "07", returnNo: "104", remarks: ""},
-            {drive: "1", assessee: "Mohammad Humayun Kabir", tin: "678822460329", circle: "130", zone: "06", returnNo: "22", remarks: ""},
-            {drive: "1", assessee: "Md. Shahjahan Ali", tin: "6881 1133 8091", circle: "241", zone: "11", returnNo: "62", remarks: ""},
-            {drive: "1", assessee: "Saleha Sarwar", tin: "1686 3877 2479", circle: "159", zone: "08", returnNo: "10", remarks: ""},
-            {drive: "1", assessee: "Saida Begum", tin: "8249 7955 4462", circle: "276", zone: "13", returnNo: "37", remarks: ""},
-            {drive: "1", assessee: "Fariha Binte Quayum", tin: "1840 3722 6881", circle: "215", zone: "10", returnNo: "54", remarks: ""},
-            {drive: "1", assessee: "Sabera Belal", tin: "4770 3972 1039", circle: "55", zone: "03", returnNo: "47", remarks: ""},
-            {drive: "1", assessee: "Zakia Binte Quayum", tin: "3243 3742 7116", circle: "41", zone: "02", returnNo: "51", remarks: ""},
-            {drive: "1", assessee: "Gulshan Ara Begum", tin: "7841 2955 1338", circle: "215", zone: "10", returnNo: "53", remarks: ""},
-            {drive: "1", assessee: "A. S. Md Nazmul Huda / Mahmuda Sultana", tin: "1623 8479 4917 / 8222 5736 0152", circle: "71 / 122", zone: "04 / 06", returnNo: "09 / 93", remarks: ""},
-            {drive: "1", assessee: "Jakia Jasmin", tin: "3950 3125 2471", circle: "323", zone: "15", returnNo: "63", remarks: ""},
-            {drive: "1", assessee: "Sharmin Sultana (Neamul 173)", tin: "2929 4120 2763", circle: "130", zone: "06", returnNo: "39", remarks: ""},
-            {drive: "1", assessee: "Ms. Joystna Khatun", tin: "8231 3539 9302", circle: "92", zone: "05", returnNo: "56", remarks: ""},
-            {drive: "1", assessee: "Atiq & Family", tin: "", circle: "", zone: "", returnNo: "", remarks: ""},
-            {drive: "1", assessee: "Sharmin Sultana (Bhabi 165)", tin: "7525 2655 8124", circle: "176", zone: "08", returnNo: "41", remarks: ""},
-            {drive: "1", assessee: "Munshi Darul Islam", tin: "5670 6736 5297", circle: "122", zone: "06", returnNo: "78", remarks: ""},
-            {drive: "1", assessee: "Dipa Chowdhury (Bhabi Munshi Bhai)", tin: "2455 1782 9010", circle: "11", zone: "01", returnNo: "83", remarks: ""},
-            {drive: "1", assessee: "Shaikh Sameen Yasar", tin: "5814 1936 9401", circle: "281", zone: "13", returnNo: "64", remarks: "OUT"},
-            {drive: "1", assessee: "Mohammad Neamul Hasan (173)", tin: "5864 2013 7641", circle: "190", zone: "09", returnNo: "68", remarks: ""},
-            {drive: "1", assessee: "Md. Shafiqul Islam (Sc. Lab)", tin: "1357 0161 2299", circle: "131", zone: "06", returnNo: "113", remarks: ""},
-            
-            // Drive 2
-            {drive: "2", assessee: "Azizun Nessa", tin: "7861 8466 4504", circle: "10", zone: "01", returnNo: "30", remarks: ""},
-            {drive: "2", assessee: "Nurani Shams Palash", tin: "7852 6862 2699", circle: "131", zone: "06", returnNo: "152", remarks: ""},
-            {drive: "2", assessee: "Monira Sultana", tin: "2507 7480 7167", circle: "234", zone: "11", returnNo: "11", remarks: ""},
-            {drive: "2", assessee: "Md. Awal", tin: "1673 2778 4450", circle: "43", zone: "02", returnNo: "108", remarks: ""},
-            {drive: "2", assessee: "Sayeda Sabrina Akter", tin: "1746 3875 4137", circle: "37", zone: "02", returnNo: "107", remarks: ""},
-            {drive: "22", assessee: "Rumana Afroz (Wife of Dr. Hadi)", tin: "1565 6966 7314", circle: "278", zone: "10", returnNo: "151", remarks: ""},
-            {drive: "2", assessee: "Shammi Khan", tin: "5448 9158 9874", circle: "131", zone: "06", returnNo: "", remarks: "OUT"},
-            {drive: "2", assessee: "Farzana Noor", tin: "1762 3115 9220", circle: "131", zone: "06", returnNo: "", remarks: "OUT"},
-            {drive: "2", assessee: "Sharmin Islam", tin: "5124 8978 8108", circle: "14", zone: "01", returnNo: "", remarks: "OUT"},
-            {drive: "2", assessee: "Asifur Rahman", tin: "2624 5954 2999", circle: "14", zone: "01", returnNo: "18", remarks: ""},
-            {drive: "22", assessee: "Kaniz Sultana", tin: "1763 0067 4920", circle: "215", zone: "10", returnNo: "19", remarks: ""},
-            {drive: "2", assessee: "Md. Mafidul Hasan", tin: "1618 8375 0303", circle: "247", zone: "12", returnNo: "20", remarks: ""},
-            {drive: "2", assessee: "Sk. Saleq- Uz- Zaman", tin: "7974 8322 3450", circle: "153", zone: "07", returnNo: "34", remarks: ""},
-            {drive: "2", assessee: "Mariam Zamila", tin: "6241 4926 0808", circle: "43", zone: "02", returnNo: "35", remarks: ""},
-            {drive: "2", assessee: "Israt Jahan", tin: "5846 0244 2299", circle: "115", zone: "06", returnNo: "43", remarks: "OUT"},
-            {drive: "2", assessee: "A.Z.M. Shafiqur Hannan (PWD)", tin: "2532 1414 8538", circle: "71", zone: "04", returnNo: "44", remarks: "OUT"},
-            {drive: "2", assessee: "Shams Saad Mahmood Palash", tin: "5498 0565 2019", circle: "131", zone: "06", returnNo: "71", remarks: ""},
-            {drive: "2", assessee: "Suraia Ahmed", tin: "4703 0198 4406", circle: "131", zone: "06", returnNo: "61", remarks: ""},
-            {drive: "2", assessee: "Md. Islam", tin: "1344 6737 1079", circle: "126", zone: "06", returnNo: "46", remarks: ""},
-            {drive: "2", assessee: "Mohammad Mohiuddin", tin: "6309 7818 5145", circle: "262", zone: "12", returnNo: "", remarks: ""},
-            {drive: "2", assessee: "Md. Kabir Hossain", tin: "6865 6311 8176", circle: "128", zone: "06", returnNo: "27", remarks: ""},
-            {drive: "2", assessee: "Sabbir Ahmed", tin: "1381 2155 2511", circle: "203", zone: "10", returnNo: "", remarks: "OUT"},
-            {drive: "2", assessee: "Israt Jahan (Murad)", tin: "7233 1539 1912", circle: "131", zone: "06", returnNo: "17", remarks: ""},
-            {drive: "2", assessee: "Mst. Saleha Ahmed (PWD Hannan Vi)", tin: "4728 7935 7124", circle: "148", zone: "07", returnNo: "", remarks: "OUT"},
+        <!-- Top Navigation Bar -->
+        <div class="header">
+            <i class="fa-regular fa-sun" style="cursor: pointer;"></i>
+            <i class="fa-regular fa-bell" style="cursor: pointer;"></i>
+            <div class="user-profile">
+                <div class="user-avatar">MH</div>
+                <span>Mehedi Hasan</span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+            </div>
+        </div>
 
-            // Drive 3
-            {drive: "3", assessee: "Nilufar Momtaz", tin: "3943 0220 6562", circle: "125", zone: "06", returnNo: "105", remarks: ""},
-            {drive: "3", assessee: "Hosne Ara", tin: "4140 3212 6598", circle: "125", zone: "06", returnNo: "16", remarks: ""},
-            {drive: "3", assessee: "Nishat Subha", tin: "4469 3486 4499", circle: "125", zone: "06", returnNo: "90", remarks: ""},
-            {drive: "3", assessee: "Sanchita Morsalin", tin: "1906 5111 9313", circle: "242", zone: "11", returnNo: "33", remarks: ""},
-            {drive: "3", assessee: "Mohammad Sajibul Alam Morsalin", tin: "7930 1214 4745", circle: "63", zone: "03", returnNo: "32", remarks: ""},
-            {drive: "3", assessee: "Md. Riyed Mosharaf", tin: "4923 9357 0604", circle: "125", zone: "06", returnNo: "45", remarks: ""},
-            {drive: "3", assessee: "Yasmin Ara Khanam", tin: "6406 1385 6957", circle: "235", zone: "11", returnNo: "129", remarks: ""},
-            {drive: "3", assessee: "Nafisa Navall", tin: "1353 7889 3187", circle: "252", zone: "12", returnNo: "31", remarks: ""},
-            {drive: "3", assessee: "Md. Al Hasib Jamal", tin: "3898 4268 9439", circle: "122", zone: "06", returnNo: "24", remarks: ""},
-            {drive: "3", assessee: "Subarna Hoque", tin: "2354 2674 3069", circle: "124", zone: "06", returnNo: "70", remarks: ""},
-            {drive: "3", assessee: "Mohammad Harun Or Rashid", tin: "2194 9465 3096", circle: "115", zone: "06", returnNo: "80", remarks: ""},
-            {drive: "3", assessee: "Thouhidur Rahman Appollo", tin: "1129 9154 3924", circle: "214", zone: "10", returnNo: "94", remarks: ""},
-            {drive: "3", assessee: "Muhammad Yousuf", tin: "2517 2416 2164", circle: "76", zone: "04", returnNo: "28", remarks: ""},
-            {drive: "3", assessee: "Ranu Ara Kutub", tin: "8497 7579 7273", circle: "292", zone: "14", returnNo: "82", remarks: ""},
-            {drive: "3", assessee: "Sayeda Afroza Khanam (PWD)", tin: "5808 8254 9428", circle: "97", zone: "05", returnNo: "42", remarks: ""},
-            {drive: "3 / 3", assessee: "Mohammad Aminul Islam / Md. Bellal Hossan", tin: "8221 8942 9164 / 5937 2546 1498", circle: "300 / 261", zone: "14 / 12", returnNo: "66", remarks: "Dead"},
-            {drive: "3", assessee: "Md. Moksudur Rahman", tin: "4295 7266 4348", circle: "278", zone: "13", returnNo: "", remarks: "OUT"},
-            {drive: "3", assessee: "Mst. Mukta Parvin", tin: "2154 3634 5602", circle: "214", zone: "10", returnNo: "", remarks: "OUT"},
-            {drive: "3", assessee: "Most. Shahanaj Parvin", tin: "4757 7054 8347", circle: "215", zone: "10", returnNo: "", remarks: "OUT"},
-            {drive: "3", assessee: "Md. Mamunur Rashid", tin: "1997 7082 6318", circle: "215", zone: "10", returnNo: "", remarks: "OUT"},
-            {drive: "3", assessee: "Md. Mashikur Rahman", tin: "1177 1321 2437", circle: "226", zone: "11", returnNo: "88", remarks: ""},
-            {drive: "3", assessee: "Sayeda Nasrin Akhter (Wife of Rizvi)", tin: "6277 2587 2718", circle: "64", zone: "03", returnNo: "69", remarks: ""},
-            {drive: "3", assessee: "Md. Shahidur Rahman Bhuiyan", tin: "4107 1252 3714", circle: "103", zone: "05", returnNo: "102", remarks: ""},
-            {drive: "3", assessee: "Md. Mahfujul Alam", tin: "6233 2717 1582", circle: "307", zone: "14", returnNo: "6", remarks: ""},
-            {drive: "3", assessee: "Hasan Mahmudul Huda", tin: "4186 0520 3944", circle: "131", zone: "06", returnNo: "", remarks: "USA"},
-            {drive: "3", assessee: "Md. Monoar Hossain (Zakir 195)", tin: "8396 6557 6233", circle: "54", zone: "03", returnNo: "38", remarks: ""},
-            {drive: "3", assessee: "Afsana Parvin", tin: "3236 6690 4854", circle: "131", zone: "06", returnNo: "18", remarks: ""},
-            {drive: "3", assessee: "Md. Rubaiat Morshed", tin: "4723 0276 9990", circle: "160", zone: "08", returnNo: "99", remarks: ""},
-            {drive: "3", assessee: "Ismat Jahan", tin: "546259223961", circle: "366", zone: "17", returnNo: "", remarks: ""},
+        <!-- Banner / Hero Section -->
+        <div class="banner">
+            <div class="banner-text">
+                <h1><i class="fa-solid fa-users"></i> Contact Directory Service</h1>
+                <p>Find, manage and stay connected with your contacts — anytime, anywhere.</p>
+                
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass" style="color: #888;"></i>
+                    <input type="text" placeholder="Search by name, phone, email or category...">
+                    <i class="fa-solid fa-magnifying-glass" style="color: #333; cursor: pointer;"></i>
+                </div>
 
-            // Drive 4
-            {drive: "4", assessee: "Muminun Nessa", tin: "4786 4273 0930", circle: "15", zone: "01", returnNo: "29", remarks: ""},
-            {drive: "4", assessee: "Md. Monowarul Islam", tin: "8500 4892 6882", circle: "54", zone: "03", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Md. Abul Hasnat Mollah", tin: "2504 2738 2655", circle: "131", zone: "06", returnNo: "91", remarks: ""},
-            {drive: "4", assessee: "Tania Tanzeem", tin: "1118 2657 8664", circle: "131", zone: "06", returnNo: "92", remarks: ""},
-            {drive: "4", assessee: "Ahmed Ali", tin: "8699 9491 7000", circle: "202", zone: "10", returnNo: "89", remarks: ""},
-            {drive: "4", assessee: "Saiful Yakub", tin: "2215 2524 2786", circle: "180", zone: "09", returnNo: "", remarks: ""},
-            {drive: "4", assessee: "Md. Sirajul Islam", tin: "8263 0794 8671", circle: "180", zone: "09", returnNo: "23", remarks: ""},
-            {drive: "4", assessee: "Mohammad Anowarul Islam", tin: "4451 0388 1221", circle: "180", zone: "09", returnNo: "", remarks: ""},
-            {drive: "4", assessee: "Monirul Islam", tin: "3896 2945 7932", circle: "180", zone: "09", returnNo: "", remarks: ""},
-            {drive: "4", assessee: "Md. Jahirul Islam", tin: "3288 3988 9977", circle: "180", zone: "09", returnNo: "110", remarks: ""},
-            {drive: "4", assessee: "Md. Nazrul Islam", tin: "6409 5925 0521", circle: "180", zone: "09", returnNo: "109", remarks: ""},
-            {drive: "4", assessee: "Md. Daudul Islam", tin: "7290 0224 0109", circle: "180", zone: "09", returnNo: "", remarks: ""},
-            {drive: "4", assessee: "Mrs. Srabanti", tin: "3559 9734 6089", circle: "115", zone: "06", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Md. Babul Hawlader", tin: "1506 7150 4027", circle: "11", zone: "01", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Asif Chowdhury", tin: "5547 2938 1245", circle: "131", zone: "06", returnNo: "60", remarks: ""},
-            {drive: "4", assessee: "Din Mohammad", tin: "2164 0774 0243", circle: "75", zone: "04", returnNo: "11", remarks: ""},
-            {drive: "4", assessee: "Meher Abjun Begum", tin: "6586 7620 3109", circle: "318", zone: "15", returnNo: "12", remarks: ""},
-            {drive: "4 / 4", assessee: "Rama Shah / S. A Trading", tin: "6798 7997 7010", circle: "303 / Meherpur", zone: "14", returnNo: "40", remarks: ""},
-            {drive: "4", assessee: "Tryotel Travels Ltd.", tin: "7351 0880 9611", circle: "74", zone: "04", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Saimon Global Ltd.", tin: "8565 7067 8518", circle: "23", zone: "02", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Rowshan Ara Begum", tin: "6829 4393 7393", circle: "41", zone: "02", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Hasina Begum", tin: "8904 9894 0112", circle: "97", zone: "05", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Sharmin Akter", tin: "3817 6613 4058", circle: "104", zone: "05", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Rajkumer Bhattacharya", tin: "4433 3042 9583", circle: "222", zone: "11", returnNo: "", remarks: "OUT"},
-            {drive: "4", assessee: "Yami Bin M. Muhaimin Saleh", tin: "1660 5076 4632", circle: "74", zone: "04", returnNo: "121", remarks: "OUT"},
+                <div class="filter-tags">
+                    <button class="tag active">All</button>
+                    <button class="tag">Friends</button>
+                    <button class="tag">Family</button>
+                    <button class="tag">Work</button>
+                    <button class="tag">Business</button>
+                    <button class="tag">Others</button>
+                </div>
+            </div>
+        </div>
 
-            // Drive 5
-            {drive: "5", assessee: "Fair Securities & Logistics", tin: "3976 2966 8244", circle: "304", zone: "14", returnNo: "", remarks: ""},
-            {drive: "5 / 5", assessee: "Saimon Global / Arnaz Rahman", tin: "8565 7067 8518 / 5106 8768 5202", circle: "02 / 131", zone: "23 / 06", returnNo: "127", remarks: "OUT"},
-            {drive: "5", assessee: "Naba Habib Belim", tin: "6742 4896 0396", circle: "147", zone: "07", returnNo: "128", remarks: ""},
-            {drive: "5", assessee: "Sugar Shots", tin: "4879 0197 7395", circle: "147", zone: "07", returnNo: "", remarks: ""},
-            {drive: "5", assessee: "Md. Masud Rana", tin: "5234 0962 9978", circle: "252", zone: "12", returnNo: "81", remarks: ""},
-            {drive: "5", assessee: "Hasibul Haque", tin: "4484 0068 4697", circle: "300", zone: "14", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Bird Place", tin: "VAT", circle: "", zone: "", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Tareq Masud Enterprise", tin: "1594 2340 9878", circle: "180", zone: "09", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Nascenia", tin: "1754 1163 2080", circle: "311", zone: "15", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Mediaider", tin: "1804 8633 0570", circle: "311", zone: "15", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Pets World", tin: "", circle: "", zone: "", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Peark Bangla Ltd.", tin: "", circle: "", zone: "", returnNo: "", remarks: "OUT"},
-            {drive: "5", assessee: "Md. Tarequll Islam", tin: "2139 0516 1246", circle: "207", zone: "10", returnNo: "", remarks: "OUT"},
-            {drive: "5 / 5", assessee: "Jannat Jute Bag Industries / Shahruk Hossain", tin: "1498 6585 6765", circle: "125", zone: "06", returnNo: "135", remarks: ""},
-            {drive: "5", assessee: "Alif Hossain Mollah", tin: "2962 2286 5289", circle: "04", zone: "01", returnNo: "136", remarks: ""},
-            {drive: "5", assessee: "Mrs. Shahnaz Sharmin", tin: "525893785966", circle: "128", zone: "06", returnNo: "137", remarks: ""},
-            {drive: "5", assessee: "Md. Badrul Hossain Mollah", tin: "273173324497", circle: "127", zone: "06", returnNo: "", remarks: "Dead"},
-            {drive: "5", assessee: "Md. Azim-Ul-Ahsan", tin: "2615 0819 7885", circle: "76", zone: "04", returnNo: "26", remarks: ""},
-            {drive: "5", assessee: "Ferdosh Ara (Sister in Law OMI)", tin: "8742 2329 0159", circle: "248", zone: "12", returnNo: "", remarks: ""},
-            {drive: "5", assessee: "Abu Muhammad Sadat", tin: "1295 8127 2250", circle: "125", zone: "06", returnNo: "14", remarks: ""},
-            {drive: "5", assessee: "Khandokar Shamsud Tahid", tin: "112488398070", circle: "05", zone: "01", returnNo: "126", remarks: ""},
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
 
-            // Drive 6
-            {drive: "6", assessee: "Shahriar Rashid (185)", tin: "881651747845", circle: "186", zone: "09", returnNo: "57", remarks: ""},
-            {drive: "6", assessee: "Zakir 195", tin: "765483350836", circle: "195", zone: "09", returnNo: "97", remarks: ""},
-            {drive: "6", assessee: "Ismat Ara Asha (Apa Palash Bhai)", tin: "1195 3879 9228", circle: "", zone: "12", returnNo: "", remarks: "Gazipur"},
-            {drive: "6", assessee: "Nova Tasha (Palash Bhai)", tin: "1189 1377 6925", circle: "192", zone: "09", returnNo: "98", remarks: ""},
-            {drive: "6", assessee: "Tiva Tasha (Palash Bhai)", tin: "5715 7534 1600", circle: "192", zone: "09", returnNo: "08", remarks: ""},
-            {drive: "6", assessee: "Hosne Ara Begum", tin: "6108 2571 2338", circle: "215", zone: "10", returnNo: "87", remarks: ""},
-            {drive: "6", assessee: "Shameem Ara Eti (Zakir 195)", tin: "3491 5135 0580", circle: "233", zone: "11", returnNo: "95", remarks: ""},
-            {drive: "6", assessee: "Zahin Zeima (Zakir 195)", tin: "3101 5088 7547", circle: "307", zone: "14", returnNo: "96", remarks: ""},
-            {drive: "6", assessee: "Md. Ashfaqure Rahman", tin: "5909 1758 3799", circle: "77", zone: "04", returnNo: "79", remarks: ""},
-            {drive: "6", assessee: "Anika Sama", tin: "6728 2620 2875", circle: "214", zone: "10", returnNo: "142", remarks: ""},
-            {drive: "6", assessee: "Md. Abdur Rajib", tin: "1554 7724 2029", circle: "215", zone: "10", returnNo: "", remarks: ""},
-            {drive: "6", assessee: "Kazi Zahidur Rahman", tin: "1320 4444 6266", circle: "214", zone: "10", returnNo: "72", remarks: ""},
-            {drive: "6", assessee: "Kazi Mohammad Ashequr Rahman", tin: "6793 8220 9247", circle: "215", zone: "10", returnNo: "73", remarks: ""},
-            {drive: "6", assessee: "Kazi Mohammad Asifur Rahman", tin: "4636 5039 1063", circle: "215", zone: "10", returnNo: "74", remarks: ""},
-            {drive: "6", assessee: "Ms. Joystna Khatun / Sabrina Jahan(Chumki)", tin: "823135399302", circle: "92", zone: "05", returnNo: "56", remarks: "Double"},
+            <!-- Recent Contacts Grid -->
+            <div>
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fa-solid fa-user-group"></i> Recent Contacts
+                    </div>
+                    <button class="btn-view-all">View All <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
 
-            // Drive 7
-            {drive: "7", assessee: "S. M. Quamrul Islam", tin: "5442 8097 3859", circle: "168", zone: "08", returnNo: "50", remarks: ""},
-            {drive: "7", assessee: "Bithika Hasan", tin: "6238 9132 0172", circle: "15", zone: "01", returnNo: "49", remarks: ""},
-            {drive: "7", assessee: "Feroza Akhter Kazol", tin: "4944 1051 3391", circle: "18", zone: "01", returnNo: "48", remarks: ""},
-            {drive: "7", assessee: "Morjina Begum", tin: "460344348106", circle: "115", zone: "06", returnNo: "123", remarks: ""},
-            {drive: "7", assessee: "Sk. Abdullah", tin: "837872243719", circle: "115", zone: "05", returnNo: "122", remarks: ""},
-            {drive: "7", assessee: "Mohammad Ali", tin: "513243317102", circle: "408", zone: "19", returnNo: "119", remarks: ""},
-            {drive: "7 / 7", assessee: "Md. Asif Ali Zaman / Nasrin", tin: "437110316084 / 389307745851", circle: "318 / 121", zone: "15 / 06", returnNo: "120 / 118", remarks: ""},
-            {drive: "7", assessee: "Saima Islam (Wife Of Mozib)", tin: "846558265715", circle: "128", zone: "06", returnNo: "", remarks: ""},
-            {drive: "7", assessee: "Md. Mozibur Rahman (Sc. Lab)", tin: "125746976519", circle: "127", zone: "06", returnNo: "", remarks: ""},
-            {drive: "7 / 7", assessee: "Mohammad Abdul Hakim Babu / Md. Ziaur Rahman (Mujib Brother)", tin: "312431119784 / 546254959261", circle: "128 / 03", zone: "06 / 01", returnNo: "153 / 124", remarks: ""},
-            {drive: "7", assessee: "Shamsun Naher (Zia, Mujib)", tin: "241840853004", circle: "19", zone: "01", returnNo: "132", remarks: ""},
-            {drive: "7", assessee: "Mia Md. Mortayez Amin", tin: "779725198592", circle: "208", zone: "10", returnNo: "149", remarks: ""},
-            {drive: "7", assessee: "Tamanna Begum", tin: "788989997801", circle: "86", zone: "04", returnNo: "150", remarks: ""}
-        ];
+                <div class="contacts-grid">
+                    <!-- Contact 1 -->
+                    <div class="contact-card">
+                        <div class="contact-info">
+                            <img src="https://i.pravatar.cc/100?img=11" class="contact-avatar" alt="Avatar">
+                            <div class="contact-details">
+                                <h4>Mehedi Hasan</h4>
+                                <p>Personal</p>
+                                <p><span class="status-dot status-online"></span><span style="color: green; font-weight:600;">Online</span></p>
+                                <p style="margin-top:2px; font-weight:600;">+880 1712 345678</p>
+                            </div>
+                        </div>
+                        <div class="action-icons">
+                            <button class="icon-btn"><i class="fa-solid fa-phone"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-comment"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                        </div>
+                    </div>
 
-        // ডাটা ব্রাউজারে রিলোড সত্ত্বেও ধরে রাখতে LocalStorage ব্যবহার
-        function loadData() {
-            let data = JSON.parse(localStorage.getItem("eReturnData"));
-            if (!data) {
-                data = initialData;
-                localStorage.setItem("eReturnData", JSON.stringify(data));
-            }
+                    <!-- Contact 2 -->
+                    <div class="contact-card">
+                        <div class="contact-info">
+                            <img src="https://i.pravatar.cc/100?img=5" class="contact-avatar" alt="Avatar">
+                            <div class="contact-details">
+                                <h4>Sadia Afrin</h4>
+                                <p>Family</p>
+                                <p><span class="status-dot status-offline"></span><span style="color: gray;">Offline</span></p>
+                                <p style="margin-top:2px; font-weight:600;">+880 1687 654321</p>
+                            </div>
+                        </div>
+                        <div class="action-icons">
+                            <button class="icon-btn"><i class="fa-solid fa-phone"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-comment"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                        </div>
+                    </div>
 
-            const tbody = document.getElementById("tableBody");
-            tbody.innerHTML = "";
+                    <!-- Contact 3 -->
+                    <div class="contact-card">
+                        <div class="contact-info">
+                            <img src="https://i.pravatar.cc/100?img=12" class="contact-avatar" alt="Avatar">
+                            <div class="contact-details">
+                                <h4>Rakib Ahmed</h4>
+                                <p>Friend</p>
+                                <p><span class="status-dot status-online"></span><span style="color: green; font-weight:600;">Online</span></p>
+                                <p style="margin-top:2px; font-weight:600;">+880 1812 967654</p>
+                            </div>
+                        </div>
+                        <div class="action-icons">
+                            <button class="icon-btn"><i class="fa-solid fa-phone"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-comment"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                        </div>
+                    </div>
 
-            data.forEach((item, index) => {
-                let row = `<tr>
-                    <td>${item.drive}</td>
-                    <td>${item.assessee}</td>
-                    <td>${item.tin}</td>
-                    <td>${item.circle}</td>
-                    <td>${item.zone}</td>
-                    <td>${item.returnNo}</td>
-                    <td>${item.remarks}</td>
-                    <td><button class="btn-delete" onclick="deleteRow(${index})">Delete</button></td>
-                </tr>`;
-                tbody.innerHTML += row;
-            });
-        }
+                    <!-- Contact 4 -->
+                    <div class="contact-card">
+                        <div class="contact-info">
+                            <img src="https://i.pravatar.cc/100?img=13" class="contact-avatar" alt="Avatar">
+                            <div class="contact-details">
+                                <h4>Tanvir Islam</h4>
+                                <p>Work</p>
+                                <p><span class="status-dot status-offline"></span><span style="color: gray;">Offline</span></p>
+                                <p style="margin-top:2px; font-weight:600;">+880 1911 223344</p>
+                            </div>
+                        </div>
+                        <div class="action-icons">
+                            <button class="icon-btn"><i class="fa-solid fa-phone"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-comment"></i></button>
+                            <button class="icon-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        // নতুন রো যোগ করার ফাংশন
-        function addRow() {
-            const drive = document.getElementById("drive").value;
-            const assessee = document.getElementById("assessee").value;
-            const tin = document.getElementById("tin").value;
-            const circle = document.getElementById("circle").value;
-            const zone = document.getElementById("zone").value;
-            const returnNo = document.getElementById("returnNo").value;
-            const remarks = document.getElementById("remarks").value;
+            <!-- Add / Edit Contact Form -->
+            <div class="add-card">
+                <div class="tab-menu">
+                    <div class="tab-item active"><i class="fa-solid fa-plus"></i> Add Contact</div>
+                    <div class="tab-item"><i class="fa-solid fa-pen"></i> Edit Contact</div>
+                    <div class="tab-item"><i class="fa-solid fa-upload"></i> Import</div>
+                </div>
 
-            if(!assessee) {
-                alert("Assessee Name আবশ্যক!");
-                return;
-            }
+                <div class="form-group">
+                    <label>Full Name <span>*</span></label>
+                    <input type="text" class="form-input" placeholder="Enter full name">
+                </div>
 
-            const newData = { drive, assessee, tin, circle, zone, returnNo, remarks };
-            let data = JSON.parse(localStorage.getItem("eReturnData"));
-            data.unshift(newData); // নতুন তথ্য সবার ওপরে যোগ হবে
+                <div class="form-group">
+                    <label>Phone Number <span>*</span></label>
+                    <input type="text" class="form-input" placeholder="+880 1XXX XXXXXX">
+                </div>
 
-            localStorage.setItem("eReturnData", JSON.stringify(data));
-            loadData();
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-input" placeholder="example@domain.com">
+                </div>
 
-            // ইনপুট বক্স ফাঁকা করা
-            document.getElementById("drive").value = "";
-            document.getElementById("assessee").value = "";
-            document.getElementById("tin").value = "";
-            document.getElementById("circle").value = "";
-            document.getElementById("zone").value = "";
-            document.getElementById("returnNo").value = "";
-            document.getElementById("remarks").value = "";
-        }
+                <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-input">
+                        <option>Select category</option>
+                        <option>Personal</option>
+                        <option>Family</option>
+                        <option>Work</option>
+                        <option>Business</option>
+                    </select>
+                </div>
 
-        // ডাটা মুছে ফেলার ফাংশন
-        function deleteRow(index) {
-            if(confirm("আপনি কি নিশ্চিত যে এই সারিটি মুছে ফেলতে চান?")) {
-                let data = JSON.parse(localStorage.getItem("eReturnData"));
-                data.splice(index, 1);
-                localStorage.setItem("eReturnData", JSON.stringify(data));
-                loadData();
-            }
-        }
+                <div class="form-group">
+                    <label>Notes (Optional)</label>
+                    <textarea class="form-input" rows="2" placeholder="Add some notes..."></textarea>
+                </div>
 
-        // পেজ লোড হলে ডাটা দেখাবে
-        loadData();
-    </script>
+                <button class="btn-save"><i class="fa-solid fa-plus"></i> Save Contact</button>
+            </div>
+        </div>
+
+        <!-- Quick Links Section (UPDATED LINKS) -->
+        <div class="quick-links">
+            <div class="section-header">
+                <div class="section-title">
+                    Quick Links <span style="font-size: 11px; font-weight: normal; color: #666; margin-left: 5px;">Useful external resources</span>
+                </div>
+                <button class="btn-view-all">View All <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="quick-links-grid">
+                <!-- Link 1 -->
+                <a href="https://challanverification.finance.gov.bd/echalan/" target="_blank" class="link-card">
+                    <div class="link-info">
+                        <div class="link-icon" style="background-color: #e3f2fd; color: #0d47a1;">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div>
+                            <div class="link-title">চালান ভেরিফাই</div>
+                            <div class="link-url">challanverification.finance.gov.bd</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px; color: #888;"></i>
+                </a>
+
+                <!-- Link 2 -->
+                <a href="https://nbr.sblesheba.com/IncomeTax/Payment" target="_blank" class="link-card">
+                    <div class="link-info">
+                        <div class="link-icon" style="background-color: #e8f5e9; color: #1b5e20;">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <div class="link-title">পেমেন্ট এনবিআর</div>
+                            <div class="link-url">nbr.sblesheba.com</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px; color: #888;"></i>
+                </a>
+
+                <!-- Link 3 -->
+                <a href="https://etaxnbr.gov.bd/#/auth/sign-in" target="_blank" class="link-card">
+                    <div class="link-info">
+                        <div class="link-icon" style="background-color: #fff3e0; color: #e65100;">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </div>
+                        <div>
+                            <div class="link-title">eReturn long</div>
+                            <div class="link-url">etaxnbr.gov.bd</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px; color: #888;"></i>
+                </a>
+
+                <!-- Link 4 -->
+                <a href="https://etaxnbr.gov.bd/#/submission-verification" target="_blank" class="link-card">
+                    <div class="link-info">
+                        <div class="link-icon" style="background-color: #f3e5f5; color: #4a148c;">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <div class="link-title">eReturn verified</div>
+                            <div class="link-url">etaxnbr.gov.bd</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px; color: #888;"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="page-footer">
+            <div>© 2025 Contact Directory Service. All rights reserved.</div>
+            <div>Connect • Manage • Grow</div>
+        </div>
+
+    </div>
+
 </body>
 </html>
+"""
+
+components.html(html_code, height=950, scrolling=True)
