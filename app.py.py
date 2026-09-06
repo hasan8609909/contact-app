@@ -25,7 +25,7 @@ def get_and_update_views():
 
 total_views = get_and_update_views()
 
-# কাস্টম ডার্ক এবং গ্লাসমোরফিজম সিএসএস (CSS)
+# মূল ডার্ক থিম ও ইনপুট বক্সের আগের কালার সমন্বয় করা CSS
 st.markdown("""
     <style>
     /* মূল ব্যাকগ্রাউন্ড ও ডার্ক থিম */
@@ -46,9 +46,29 @@ st.markdown("""
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
     
-    /* সার্চ ইনপুট ফিল্ড স্টাইল (সাদা লেখা) */
-    div[data-testid="stTextInput"]:first-of-type div[data-baseweb="input"] input {
-        color: white !important;
+    /* সকল টেক্সট ইনপুট, সিলেক্ট বক্স এবং টেক্সট ফিল্ডে সাদা লেখা ও আগের ব্যাকগ্রাউন্ড */
+    div[data-baseweb="input"] input,
+    div[data-baseweb="select"] div,
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stSelectbox"] div {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.07) !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* ড্রপডাউন অপশন পপআপ ব্যাকগ্রাউন্ড ও টেক্সট */
+    ul[data-baseweb="menu"] {
+        background-color: #1a2e3b !important;
+        color: #ffffff !important;
+    }
+    li[data-baseweb="option"] {
+        color: #ffffff !important;
+    }
+
+    /* লেবেল ও টেক্সটের কালার সাদা রাখা */
+    label, p, span, div {
+        color: #ffffff !important;
     }
 
     /* বাটনের ডিজাইন */
@@ -56,8 +76,9 @@ st.markdown("""
         width: 100%;
         border-radius: 10px;
         background-color: #0083B0;
-        color: white;
+        color: #ffffff !important;
         border: none;
+        font-weight: bold;
     }
 
     /* লিংক বাটনের বিশেষ স্টাইল */
@@ -78,23 +99,6 @@ st.markdown("""
         background: rgba(255, 255, 255, 0.2);
         border-color: #00d2ff;
         box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
-    }
-
-    /* ট্যাব এর ভেতরের ইনপুট ও সিলেক্ট বক্সের ফন্ট কালার কালো করা */
-    div[data-testid="stTabs"] div[data-baseweb="input"] input,
-    div[data-testid="stTabs"] div[data-baseweb="select"] div {
-        color: #000000 !important;
-        background-color: #ffffff !important;
-        border-radius: 8px !important;
-    }
-    
-    div[data-testid="stTabs"] div[data-baseweb="input"] {
-        background-color: #ffffff !important;
-        border-radius: 8px !important;
-    }
-
-    div[data-testid="stTabs"] label {
-        color: #ffffff !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -119,7 +123,7 @@ if "contacts" not in st.session_state:
         "Zakia Binte Quayum": {"Drive": "1", "e-TIN": "3243 3742 7116", "Circle": "41", "Zone": "02", "E-Return": "51", "Remarks": ""},
         "Gulshan Ara Begum": {"Drive": "1", "e-TIN": "7841 2955 1338", "Circle": "215", "Zone": "10", "E-Return": "53", "Remarks": ""},
         "A. S. Md Nazmul Huda": {"Drive": "1", "e-TIN": "1623 8479 4917", "Circle": "71", "Zone": "04", "E-Return": "09", "Remarks": ""},
-        "Mahmuda Sultana": {"Drive": "1", "e-TIN": "8222 5736 0152", "Circle": "122", "Zone": "06", "E-Return": "93", "Remarks": ""},
+        "Mahmuda Sultana": {"Drive": "", "e-TIN": "8222 5736 0152", "Circle": "122", "Zone": "06", "E-Return": "93", "Remarks": ""},
         "Jakia Jasmin": {"Drive": "1", "e-TIN": "3950 3125 2471", "Circle": "323", "Zone": "15", "E-Return": "63", "Remarks": ""},
         "Sharmin Sultana (Neamul 173)": {"Drive": "1", "e-TIN": "2929 4120 2763", "Circle": "130", "Zone": "06", "E-Return": "39", "Remarks": ""},
         "Ms. Joystna Khatun": {"Drive": "1", "e-TIN": "8231 3539 9302", "Circle": "92", "Zone": "05", "E-Return": "56", "Remarks": ""},
@@ -137,7 +141,7 @@ if "contacts" not in st.session_state:
         "Monira Sultana": {"Drive": "2", "e-TIN": "2507 7480 7167", "Circle": "234", "Zone": "11", "E-Return": "11", "Remarks": ""},
         "Md. Awal": {"Drive": "2", "e-TIN": "1673 2778 4450", "Circle": "43", "Zone": "02", "E-Return": "108", "Remarks": ""},
         "Sayeda Sabrina Akter": {"Drive": "2", "e-TIN": "1746 3875 4137", "Circle": "37", "Zone": "02", "E-Return": "107", "Remarks": ""},
-        "Rumana Afroz (Wife of Dr. Hadi)": {"Drive": "2", "e-TIN": "1565 6966 7314", "Circle": "278", "Zone": "10", "E-Return": "151", "Remarks": ""},
+        "Rumana Afroz (Wife of Dr. Hadi)": {"Drive": "22", "e-TIN": "1565 6966 7314", "Circle": "278", "Zone": "10", "E-Return": "151", "Remarks": ""},
         "Shammi Khan": {"Drive": "2", "e-TIN": "5448 9158 9874", "Circle": "131", "Zone": "06", "E-Return": "", "Remarks": "OUT"},
         "Farzana Noor": {"Drive": "2", "e-TIN": "1762 3115 9220", "Circle": "131", "Zone": "06", "E-Return": "", "Remarks": "OUT"},
         "Sharmin Islam": {"Drive": "2", "e-TIN": "5124 8978 8108", "Circle": "14", "Zone": "01", "E-Return": "", "Remarks": "OUT"},
@@ -296,7 +300,7 @@ with col2:
 
 st.markdown("---")
 
-# ৩. গুরুত্বপূর্ণ লিংকসমূহ (Important Links)
+# ৩. গুরুত্বপূর্ণ লিংকসমূহ
 st.subheader("🔗 গুরুত্বপূর্ণ লিংকসমূহ")
 l_col1, l_col2 = st.columns(2)
 
