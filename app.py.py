@@ -1,11 +1,3 @@
-import streamlit as st
-import streamlit.components.v1 as components
-
-# Streamlit Page Setup
-st.set_page_config(page_title="e-Return Management System", layout="wide")
-
-# HTML and JS Code
-html_code = """
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -58,11 +50,14 @@ html_code = """
             </tr>
         </thead>
         <tbody id="tableBody">
+            <!-- JavaScript দিয়ে ডাটা লোড হবে -->
         </tbody>
     </table>
 
     <script>
+        // PDF এর প্রাথমিক তথ্যসমূহ
         const initialData = [
+            // Drive 1
             {drive: "1", assessee: "Shaikh Nazrul Islam", tin: "2886 9380 3054", circle: "54", zone: "3", returnNo: "65", remarks: "OUT"},
             {drive: "1", assessee: "Abu Yousuf Joarder", tin: "6585 6368 7606", circle: "158", zone: "8", returnNo: "21", remarks: ""},
             {drive: "1", assessee: "G.M. Khorshed Alam", tin: "5622 2372 1805", circle: "186", zone: "9", returnNo: "13", remarks: ""},
@@ -89,6 +84,8 @@ html_code = """
             {drive: "1", assessee: "Shaikh Sameen Yasar", tin: "5814 1936 9401", circle: "281", zone: "13", returnNo: "64", remarks: "OUT"},
             {drive: "1", assessee: "Mohammad Neamul Hasan (173)", tin: "5864 2013 7641", circle: "190", zone: "09", returnNo: "68", remarks: ""},
             {drive: "1", assessee: "Md. Shafiqul Islam (Sc. Lab)", tin: "1357 0161 2299", circle: "131", zone: "06", returnNo: "113", remarks: ""},
+            
+            // Drive 2
             {drive: "2", assessee: "Azizun Nessa", tin: "7861 8466 4504", circle: "10", zone: "01", returnNo: "30", remarks: ""},
             {drive: "2", assessee: "Nurani Shams Palash", tin: "7852 6862 2699", circle: "131", zone: "06", returnNo: "152", remarks: ""},
             {drive: "2", assessee: "Monira Sultana", tin: "2507 7480 7167", circle: "234", zone: "11", returnNo: "11", remarks: ""},
@@ -113,6 +110,8 @@ html_code = """
             {drive: "2", assessee: "Sabbir Ahmed", tin: "1381 2155 2511", circle: "203", zone: "10", returnNo: "", remarks: "OUT"},
             {drive: "2", assessee: "Israt Jahan (Murad)", tin: "7233 1539 1912", circle: "131", zone: "06", returnNo: "17", remarks: ""},
             {drive: "2", assessee: "Mst. Saleha Ahmed (PWD Hannan Vi)", tin: "4728 7935 7124", circle: "148", zone: "07", returnNo: "", remarks: "OUT"},
+
+            // Drive 3
             {drive: "3", assessee: "Nilufar Momtaz", tin: "3943 0220 6562", circle: "125", zone: "06", returnNo: "105", remarks: ""},
             {drive: "3", assessee: "Hosne Ara", tin: "4140 3212 6598", circle: "125", zone: "06", returnNo: "16", remarks: ""},
             {drive: "3", assessee: "Nishat Subha", tin: "4469 3486 4499", circle: "125", zone: "06", returnNo: "90", remarks: ""},
@@ -142,6 +141,8 @@ html_code = """
             {drive: "3", assessee: "Afsana Parvin", tin: "3236 6690 4854", circle: "131", zone: "06", returnNo: "18", remarks: ""},
             {drive: "3", assessee: "Md. Rubaiat Morshed", tin: "4723 0276 9990", circle: "160", zone: "08", returnNo: "99", remarks: ""},
             {drive: "3", assessee: "Ismat Jahan", tin: "546259223961", circle: "366", zone: "17", returnNo: "", remarks: ""},
+
+            // Drive 4
             {drive: "4", assessee: "Muminun Nessa", tin: "4786 4273 0930", circle: "15", zone: "01", returnNo: "29", remarks: ""},
             {drive: "4", assessee: "Md. Monowarul Islam", tin: "8500 4892 6882", circle: "54", zone: "03", returnNo: "", remarks: "OUT"},
             {drive: "4", assessee: "Md. Abul Hasnat Mollah", tin: "2504 2738 2655", circle: "131", zone: "06", returnNo: "91", remarks: ""},
@@ -167,6 +168,8 @@ html_code = """
             {drive: "4", assessee: "Sharmin Akter", tin: "3817 6613 4058", circle: "104", zone: "05", returnNo: "", remarks: "OUT"},
             {drive: "4", assessee: "Rajkumer Bhattacharya", tin: "4433 3042 9583", circle: "222", zone: "11", returnNo: "", remarks: "OUT"},
             {drive: "4", assessee: "Yami Bin M. Muhaimin Saleh", tin: "1660 5076 4632", circle: "74", zone: "04", returnNo: "121", remarks: "OUT"},
+
+            // Drive 5
             {drive: "5", assessee: "Fair Securities & Logistics", tin: "3976 2966 8244", circle: "304", zone: "14", returnNo: "", remarks: ""},
             {drive: "5 / 5", assessee: "Saimon Global / Arnaz Rahman", tin: "8565 7067 8518 / 5106 8768 5202", circle: "02 / 131", zone: "23 / 06", returnNo: "127", remarks: "OUT"},
             {drive: "5", assessee: "Naba Habib Belim", tin: "6742 4896 0396", circle: "147", zone: "07", returnNo: "128", remarks: ""},
@@ -188,6 +191,8 @@ html_code = """
             {drive: "5", assessee: "Ferdosh Ara (Sister in Law OMI)", tin: "8742 2329 0159", circle: "248", zone: "12", returnNo: "", remarks: ""},
             {drive: "5", assessee: "Abu Muhammad Sadat", tin: "1295 8127 2250", circle: "125", zone: "06", returnNo: "14", remarks: ""},
             {drive: "5", assessee: "Khandokar Shamsud Tahid", tin: "112488398070", circle: "05", zone: "01", returnNo: "126", remarks: ""},
+
+            // Drive 6
             {drive: "6", assessee: "Shahriar Rashid (185)", tin: "881651747845", circle: "186", zone: "09", returnNo: "57", remarks: ""},
             {drive: "6", assessee: "Zakir 195", tin: "765483350836", circle: "195", zone: "09", returnNo: "97", remarks: ""},
             {drive: "6", assessee: "Ismat Ara Asha (Apa Palash Bhai)", tin: "1195 3879 9228", circle: "", zone: "12", returnNo: "", remarks: "Gazipur"},
@@ -203,6 +208,8 @@ html_code = """
             {drive: "6", assessee: "Kazi Mohammad Ashequr Rahman", tin: "6793 8220 9247", circle: "215", zone: "10", returnNo: "73", remarks: ""},
             {drive: "6", assessee: "Kazi Mohammad Asifur Rahman", tin: "4636 5039 1063", circle: "215", zone: "10", returnNo: "74", remarks: ""},
             {drive: "6", assessee: "Ms. Joystna Khatun / Sabrina Jahan(Chumki)", tin: "823135399302", circle: "92", zone: "05", returnNo: "56", remarks: "Double"},
+
+            // Drive 7
             {drive: "7", assessee: "S. M. Quamrul Islam", tin: "5442 8097 3859", circle: "168", zone: "08", returnNo: "50", remarks: ""},
             {drive: "7", assessee: "Bithika Hasan", tin: "6238 9132 0172", circle: "15", zone: "01", returnNo: "49", remarks: ""},
             {drive: "7", assessee: "Feroza Akhter Kazol", tin: "4944 1051 3391", circle: "18", zone: "01", returnNo: "48", remarks: ""},
@@ -218,6 +225,7 @@ html_code = """
             {drive: "7", assessee: "Tamanna Begum", tin: "788989997801", circle: "86", zone: "04", returnNo: "150", remarks: ""}
         ];
 
+        // ডাটা ব্রাউজারে রিলোড সত্ত্বেও ধরে রাখতে LocalStorage ব্যবহার
         function loadData() {
             let data = JSON.parse(localStorage.getItem("eReturnData"));
             if (!data) {
@@ -243,6 +251,7 @@ html_code = """
             });
         }
 
+        // নতুন রো যোগ করার ফাংশন
         function addRow() {
             const drive = document.getElementById("drive").value;
             const assessee = document.getElementById("assessee").value;
@@ -259,11 +268,12 @@ html_code = """
 
             const newData = { drive, assessee, tin, circle, zone, returnNo, remarks };
             let data = JSON.parse(localStorage.getItem("eReturnData"));
-            data.unshift(newData);
+            data.unshift(newData); // নতুন তথ্য সবার ওপরে যোগ হবে
 
             localStorage.setItem("eReturnData", JSON.stringify(data));
             loadData();
 
+            // ইনপুট বক্স ফাঁকা করা
             document.getElementById("drive").value = "";
             document.getElementById("assessee").value = "";
             document.getElementById("tin").value = "";
@@ -273,6 +283,7 @@ html_code = """
             document.getElementById("remarks").value = "";
         }
 
+        // ডাটা মুছে ফেলার ফাংশন
         function deleteRow(index) {
             if(confirm("আপনি কি নিশ্চিত যে এই সারিটি মুছে ফেলতে চান?")) {
                 let data = JSON.parse(localStorage.getItem("eReturnData"));
@@ -282,11 +293,8 @@ html_code = """
             }
         }
 
+        // পেজ লোড হলে ডাটা দেখাবে
         loadData();
     </script>
 </body>
 </html>
-"""
-
-# Render HTML in Streamlit
-components.html(html_code, height=800, scrolling=True)
