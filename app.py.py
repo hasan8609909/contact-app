@@ -1,4 +1,4 @@
-import tkinter as tk
+import streamlit as st
 
 # আপনার দেওয়া সম্পূর্ণ কন্টাক্ট ও ট্যাক্স ডিরেক্টরি ডেটা লিস্ট
 contacts = [
@@ -36,12 +36,12 @@ contacts = [
     {"drive": "2", "assessee": "Monira Sultana", "tin": "2507 7480 7167", "circle": "234", "zone": "11", "returnNo": "11", "remarks": ""},
     {"drive": "2", "assessee": "Md. Awal", "tin": "1673 2778 4450", "circle": "43", "zone": "02", "returnNo": "108", "remarks": ""},
     {"drive": "2", "assessee": "Sayeda Sabrina Akter", "tin": "1746 3875 4137", "circle": "37", "zone": "02", "returnNo": "107", "remarks": ""},
-    {"drive": "2", "assessee": "Rumana Afroz (Wife of Dr. Hadi)", "tin": "1565 6966 7314", "circle": "278", "zone": "10", "returnNo": "151", "remarks": ""},
+    {"drive": "22", "assessee": "Rumana Afroz (Wife of Dr. Hadi)", "tin": "1565 6966 7314", "circle": "278", "zone": "10", "returnNo": "151", "remarks": ""},
     {"drive": "2", "assessee": "Shammi Khan", "tin": "5448 9158 9874", "circle": "131", "zone": "06", "returnNo": "", "remarks": "OUT"},
     {"drive": "2", "assessee": "Farzana Noor", "tin": "1762 3115 9220", "circle": "131", "zone": "06", "returnNo": "", "remarks": "OUT"},
     {"drive": "2", "assessee": "Sharmin Islam", "tin": "5124 8978 8108", "circle": "14", "zone": "01", "returnNo": "", "remarks": "OUT"},
     {"drive": "2", "assessee": "Asifur Rahman", "tin": "2624 5954 2999", "circle": "14", "zone": "01", "returnNo": "18", "remarks": ""},
-    {"drive": "2", "assessee": "Kaniz Sultana", "tin": "1763 0067 4920", "circle": "215", "zone": "10", "returnNo": "19", "remarks": ""},
+    {"drive": "22", "assessee": "Kaniz Sultana", "tin": "1763 0067 4920", "circle": "215", "zone": "10", "returnNo": "19", "remarks": ""},
     {"drive": "2", "assessee": "Md. Mafidul Hasan", "tin": "1618 8375 0303", "circle": "247", "zone": "12", "returnNo": "20", "remarks": ""},
     {"drive": "2", "assessee": "Sk. Saleq- Uz- Zaman", "tin": "7974 8322 3450", "circle": "153", "zone": "07", "returnNo": "34", "remarks": ""},
     {"drive": "2", "assessee": "Mariam Zamila", "tin": "6241 4926 0808", "circle": "43", "zone": "02", "returnNo": "35", "remarks": ""},
@@ -170,114 +170,32 @@ contacts = [
     {"drive": "7", "assessee": "Tamanna Begum", "tin": "788989997801", "circle": "86", "zone": "04", "returnNo": "150", "remarks": ""}
 ]
 
-def search_contacts(*args):
-    query = search_var.get().strip().lower()
-    
-    # Text Box ক্লিয়ার করা
-    result_text.config(state="normal")
-    result_text.delete("1.0", tk.END)
-    
-    if not query:
-        result_text.insert(tk.END, "উপরে নাম টাইপ করে সার্চ করুন", "placeholder")
-        result_text.config(state="disabled")
-        return
+# Streamlit UI Configuration
+st.set_page_config(page_title="কন্টাক্ট ডিরেক্টরি সার্চ", page_icon="📱", layout="centered")
 
-    # Assessee ফিল্টার করা
-    filtered = [c for c in contacts if query in c["assessee"].lower()]
+st.title("📱 কন্টাক্ট ডিরেক্টরি সার্চ")
 
-    if not filtered:
-        result_text.insert(tk.END, "কোনো তথ্য পাওয়া যায়নি", "placeholder")
+# Search Input
+search_query = st.text_input("🔍 নাম টাইপ করে সার্চ করুন:", placeholder="যেমন: Islam, Sultana, Palash...")
+
+if search_query.strip():
+    query = search_query.strip().lower()
+    filtered_contacts = [c for c in contacts if query in c["assessee"].lower()]
+
+    if filtered_contacts:
+        st.subheader(f"ফলাফল ({len(filtered_contacts)} টি পাওয়া গেছে):")
+        for item in filtered_contacts:
+            with st.expander(f"👤 {item['assessee']}", expanded=True):
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write(f"**Drive:** {item['drive']}")
+                    st.write(f"**TIN:** {item['tin']}")
+                    st.write(f"**Circle:** {item['circle']}")
+                with col2:
+                    st.write(f"**Zone:** {item['zone']}")
+                    st.write(f"**Return No:** {item['returnNo']}")
+                    st.write(f"**Remarks:** {item['remarks'] if item['remarks'] else 'N/A'}")
     else:
-        for index, item in enumerate(filtered, start=1):
-            result_text.insert(tk.END, f"{index}. {item['assessee']}\n", "name_style")
-            result_text.insert(tk.END, f"   • Drive: {item['drive']}\n", "info_style")
-            result_text.insert(tk.END, f"   • TIN: {item['tin']}\n", "info_style")
-            result_text.insert(tk.END, f"   • Circle: {item['circle']} | Zone: {item['zone']}\n", "info_style")
-            result_text.insert(tk.END, f"   • Return No: {item['returnNo']}\n", "info_style")
-            if item['remarks']:
-                result_text.insert(tk.END, f"   • Remarks: {item['remarks']}\n", "info_style")
-            result_text.insert(tk.END, "\n")
-
-    result_text.config(state="disabled")
-
-# Main Window Setup
-root = tk.Tk()
-root.title("কন্টাক্ট ডিরেক্টরি সার্চ")
-root.geometry("400x680")
-root.configure(bg="#0d1419")
-
-# Header Frame
-header_frame = tk.Frame(root, bg="#1a2b36", highlightbackground="#2d4b5a", highlightthickness=1)
-header_frame.pack(fill="x", padx=15, pady=15, ipady=8)
-
-header_label = tk.Label(
-    header_frame, 
-    text="📱 কন্টাক্ট ডিরেক্টরি সার্চ", 
-    font=("Segoe UI", 14, "bold"), 
-    fg="#e0e6ed", 
-    bg="#1a2b36"
-)
-header_label.pack()
-
-# Search Box Frame
-search_frame = tk.Frame(root, bg="#111d24", highlightbackground="#32586b", highlightthickness=1)
-search_frame.pack(fill="x", padx=15, pady=5)
-
-search_icon = tk.Label(search_frame, text="🔍", font=("Segoe UI", 12), fg="#8da4b4", bg="#111d24")
-search_icon.pack(side="left", padx=8)
-
-search_var = tk.StringVar()
-search_var.trace_add("write", search_contacts)
-
-search_entry = tk.Entry(
-    search_frame, 
-    textvariable=search_var, 
-    font=("Segoe UI", 11), 
-    bg="#111d24", 
-    fg="#ffffff", 
-    insertbackground="white", 
-    bd=0
-)
-search_entry.pack(fill="x", ipady=8, padx=5)
-
-# Result Box Frame
-result_frame = tk.Frame(root, bg="#111d24", highlightbackground="#284453", highlightthickness=1)
-result_frame.pack(fill="both", expand=True, padx=15, pady=10)
-
-result_text = tk.Text(
-    result_frame, 
-    font=("Segoe UI", 10), 
-    bg="#111d24", 
-    fg="#e0e6ed", 
-    bd=0, 
-    wrap="word",
-    padx=10,
-    pady=10
-)
-result_text.pack(fill="both", expand=True)
-
-# Styling Tags
-result_text.tag_config("placeholder", foreground="#7993a4", justify="center")
-result_text.tag_config("name_style", foreground="#00e5ff", font=("Segoe UI", 11, "bold"))
-result_text.tag_config("info_style", foreground="#a4bece")
-
-# Initial Placeholder Text
-result_text.insert(tk.END, "উপরে নাম টাইপ করে সার্চ করুন", "placeholder")
-result_text.config(state="disabled")
-
-# Floating Action Button (+)
-fab_btn = tk.Button(
-    root, 
-    text="+", 
-    font=("Segoe UI", 18, "bold"), 
-    bg="#3952bb", 
-    fg="white", 
-    bd=0, 
-    activebackground="#2a3d8f",
-    activeforeground="white",
-    width=3, 
-    height=1
-)
-fab_btn.place(relx=0.85, rely=0.92, anchor="center")
-
-root.mainloop()
+        st.warning("কোনো তথ্য পাওয়া যায়নি।")
+else:
+    st.info("উপরে সার্চ বক্সে নাম লিখে সার্চ করুন।")
